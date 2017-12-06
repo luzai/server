@@ -1,0 +1,7 @@
+channels:
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+  - conda-forge
+  - defaults
+ssl_verify: true
+show_channel_urls: true
+
