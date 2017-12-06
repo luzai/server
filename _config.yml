@@ -1,4 +1,5 @@
-theme: jekyll-theme-cayman
+# theme: jekyll-theme-cayman
+theme: jekyll-theme-primer
 
 title: Server 84
 description: configs files for server 84

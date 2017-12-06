@@ -1,7 +1,7 @@
 
 - Only user `amax` is allowed to use `sudo` on server 84. If need to use, you can
   - post a new issue here.
-  - contact chenming or luzai, to access `sudo` from `amax`. 
+  - contact chenming or luzai, to access `sudo` from `amax`.
 - If need to download config files, contact luzai, he will
   - distribute an `id_rsa` file so that you can access this private repo.
   - or add you to this repo as one of contributors.
@@ -53,10 +53,56 @@ alias wget='proxychains wget -c '
 alias conda='proxychains conda'
 ```
 
+## Be careful to use tensorflow!
+
+``` python
+def init_dev(n=(0,)):
+    logging.info('use gpu {}'.format(n))
+    from os.path import expanduser
+    home = expanduser("~")
+    if isinstance(n, int):
+        n = (n,)
+    devs = ''
+    for n_ in n:
+        devs += str(n_) + ','
+    os.environ["CUDA_VISIBLE_DEVICES"] = devs
+    os.environ['PATH'] = home + '/cuda-8.0/bin:' + os.environ['PATH']
+    # os.environ['PATH'] = home + '/anaconda2/bin:' + os.environ['PATH']
+    os.environ['PATH'] = home + '/usr/local/cuda-8.0/bin:' + os.environ['PATH']
+
+    os.environ['LD_LIBRARY_PATH'] = home + '/cuda-8.0/lib64'
+    os.environ['LD_LIBRARY_PATH'] = '/usr/local/cuda-8.0/lib64'
+    # os.environ['PYTHONWARNINGS'] = "ignore"
+
+
+def set_env(key, value):
+    value = os.path.abspath(value)
+    os.environ[key] = value + ':' + os.environ[key]
+
+
+def allow_growth_tf():
+    import tensorflow as tf
+    _sess_config = tf.ConfigProto(allow_soft_placement=True)
+    _sess_config.gpu_options.allow_growth = True
+    return _sess_config
+
+
+def allow_growth_keras():
+    import tensorflow as tf
+    tf_graph = tf.get_default_graph()
+    _sess_config = allow_growth_tf()
+    sess = tf.Session(config=_sess_config, graph=tf_graph)
+    import keras.backend as K
+    K.set_session(sess)
+    return sess
+```
+
 ## Other config files
 
-- .condarc: use ustc's mirror
-- .pip: use tsing's mirror
-- sources.list.14.04: use aliyun's mirror
-- proxychains.conf: proxy for http(s) and sock5
-- tsocks.conf: proxy for sock5
+copy them to your home path, i.e., ~.
+
+- `.condarc`: use ustc's mirror
+- `.pip`: use tsinghua's mirror
+- `sources.list.14.04`: use aliyun's mirror -- has been put to /etc/apt/
+- `proxychains.conf`: proxy for http(s) and sock5
+- `tsocks.conf`: proxy for sock5
