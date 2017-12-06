@@ -1,4 +1,3 @@
-# Sever 84
 
 Only user `amax` is allowed to use `sudo`
 If need to use, contact 3140102282@zju.edu.cn.
