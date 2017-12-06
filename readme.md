@@ -1,6 +1,11 @@
 
-Only user `amax` is allowed to use `sudo`
-If need to use, contact 3140102282@zju.edu.cn.
+- Only user `amax` is allowed to use `sudo` on server 84. If need to use, you can
+  - post a new issue here.
+  - contact chenming or luzai, to access `sudo` from `amax`. 
+- If need to download config files, contact luzai, he will
+  - distribute an `id_rsa` file so that you can access this private repo.
+  - or add you to this repo as one of contributors.
+- Feel free to issue and fix errors, including typos!
 
 ## Connect to Internet
 
@@ -25,8 +30,8 @@ proxychains curl ip.gs
 
 If 1080 is being used, you can
 
-- use existed 1080
-- Start a new port, as below
+- use existed 1080, and of course, other user's Internet. In the most time, luzai will share his Internet to server.
+- Start a new port, as shown below
 
 ``` bash
 cp /etc/proxychains.conf ./
@@ -47,3 +52,11 @@ alias pip3='proxychains pip3'
 alias wget='proxychains wget -c '
 alias conda='proxychains conda'
 ```
+
+## Other config files
+
+- .condarc: use ustc's mirror
+- .pip: use tsing's mirror
+- sources.list.14.04: use aliyun's mirror
+- proxychains.conf: proxy for http(s) and sock5
+- tsocks.conf: proxy for sock5
