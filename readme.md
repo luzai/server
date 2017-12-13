@@ -17,7 +17,8 @@ Here provide a method to share Internet of your laptop to server.
   - windows system can try:
     - cygwin and install openssh-client
     - linux subsystem and install openssh-client
-    - [Potentially work] some gui manipulations in putty, I do not find the way. Tell me if you are familiar with putty.
+    - [Potentially work] some gui manipulations in putty, I fail to find the way. Tell me if you are familiar with putty.
+  - ubuntu: `sudo apt-get install openssh-client`
 
 ### Forward Dynamic Port
 
@@ -55,10 +56,25 @@ alias conda='proxychains conda'
 
 ## Be careful to use tensorflow!
 
+### Limit to one Device
+
+In terminal, before running program,  set environment variable.
+
+``` bash
+export CUDA_VISIBLE_DEVICES=0,1
+python train.py
+python resume.py
+```
+
+`CUDA_VISIBLE_DEVICES=0,1 python train.py`
+
+In python,  set environment variable.
+
 ``` python
 def init_dev(n=(0,)):
-    logging.info('use gpu {}'.format(n))
     from os.path import expanduser
+
+    logging.info('use gpu {}'.format(n))
     home = expanduser("~")
     if isinstance(n, int):
         n = (n,)
@@ -66,20 +82,21 @@ def init_dev(n=(0,)):
     for n_ in n:
         devs += str(n_) + ','
     os.environ["CUDA_VISIBLE_DEVICES"] = devs
-    os.environ['PATH'] = home + '/cuda-8.0/bin:' + os.environ['PATH']
-    # os.environ['PATH'] = home + '/anaconda2/bin:' + os.environ['PATH']
-    os.environ['PATH'] = home + '/usr/local/cuda-8.0/bin:' + os.environ['PATH']
-
-    os.environ['LD_LIBRARY_PATH'] = home + '/cuda-8.0/lib64'
-    os.environ['LD_LIBRARY_PATH'] = '/usr/local/cuda-8.0/lib64'
-    # os.environ['PYTHONWARNINGS'] = "ignore"
+    # set_env('PATH', home + '/cuda-8.0/bin' )
+    # set_env('LD_LIBRARY_PATH', '/usr/local/cuda-8.0/lib64')
 
 
 def set_env(key, value):
-    value = os.path.abspath(value)
     os.environ[key] = value + ':' + os.environ[key]
+```
 
+In python:  use `tf.device` when construct graph.
 
+### Allow Growth
+
+In order to know how much memory I consume, really.
+
+``` python
 def allow_growth_tf():
     import tensorflow as tf
     _sess_config = tf.ConfigProto(allow_soft_placement=True)
@@ -99,10 +116,15 @@ def allow_growth_keras():
 
 ## Other config files
 
+System config:
+Apt source, use one of:
+- [x] ustc's ipv6 mirror. (Now we are using)
+- zju's 14.04 mirror.
+- aliyun 14.04 mirror.
+
 copy them to your home path, i.e., ~.
 
 - `.condarc`: use ustc's mirror
 - `.pip`: use tsinghua's mirror
-- `sources.list.14.04`: use aliyun's mirror -- has been put to /etc/apt/
 - `proxychains.conf`: proxy for http(s) and sock5
 - `tsocks.conf`: proxy for sock5
