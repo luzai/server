@@ -122,9 +122,12 @@ Apt source, use one of:
 - zju's 14.04 mirror.
 - aliyun 14.04 mirror.
 
-copy them to your home path, i.e., ~.
+Copy them to your home path, i.e., ~.
 
 - `.condarc`: use ustc's mirror
 - `.pip`: use tsinghua's mirror
+
+Copy them to current directory to override system config.
+
 - `proxychains.conf`: proxy for http(s) and sock5
 - `tsocks.conf`: proxy for sock5
